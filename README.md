@@ -26,33 +26,41 @@ As 6 perguntas de negócio cobertas foram:
 
 ---
 
-## Fluxos de arquitetura — POC, Batch e Streaming
+## Fluxos de arquitetura — POC, streaming e Batch
 
-O diagrama abaixo ilustra os três cenários possíveis de uso da solução:
+O primeiro diagrama abaixo, mostra como foi construida a solução (POC):
 
 ```mermaid
 flowchart TD
 
     subgraph POC["🧪 POC — Dados Sintéticos"]
-        P1[Python Script<br/>Dados Sintéticos] --> P2[Cloud Storage<br/>GCS Bucket]
+        P1[Python Script<br/>Geração de Dados Sintéticos] --> P2[Cloud Storage<br/>GCS Bucket]
         P2 --> P3[CCAI Insights<br/>Import API]
         P3 --> P4[CCAI Insights<br/>Análise NLP]
         P4 --> P5[BigQuery<br/>conversations_enriched]
         P5 --> P6[Looker Studio<br/>Dashboard]
     end
+```
+
+A seguir a arquitetura simplificada que simula o cenário real em streaming e batch:
+
+```mermaid
+flowchart LR
 
     subgraph BATCH["🗂️ Produção — Batch Diário"]
+        direction LR
         B1[📞 Fim da<br/>Ligação] --> B2[Telephony / CCAI<br/>Conversation]
         B2 --> B3[Firestore<br/>Metadados da conversa<br/>agentId, status, fcr...]
         B3 --> B4[Cloud Storage<br/>Áudio / Transcript]
         B4 -->|Cloud Scheduler<br/>23h diário| B5[Cloud Run<br/>Job de Exportação]
         B5 --> B6[CCAI Insights<br/>Export API]
         B6 --> B7[BigQuery<br/>conversations]
-        B3 -->|Dataflow| B7
+        B3 -.->|Dataflow<br/>enriquece com metadados| B7
         B7 --> B8[Looker Studio<br/>Dashboard Manhã]
     end
 
     subgraph STREAM["⚡ Produção — Streaming"]
+        direction LR
         S1[📞 Fim da<br/>Ligação] --> S2[Telephony / CCAI<br/>Conversation]
         S2 --> S3[Pub/Sub<br/>Tópico: conversa-encerrada]
         S2 --> S4[Firestore<br/>Metadados em tempo real]
@@ -62,7 +70,7 @@ flowchart TD
         S6 --> S7[BigQuery<br/>Streaming Insert]
         S5 -->|Falha| S8[Dead Letter Topic<br/>Pub/Sub]
         S8 -->|Retry| S5
-        S7 --> S9[Looker Studio<br/>Tempo Real]
+        S7 --> S9[Looker Studio<br/>Dashboard Tempo Real]
     end
 ```
 
@@ -92,7 +100,8 @@ Nesta POC trabalhamos com **1.000 conversas sintéticas** em formato CHAT, envia
 O CCAI gerou, para cada conversa, os seguintes campos nativos:
 
 - `conversationName` — ID único da conversa
-- `medium`, `languageCode`
+- `medium` — formato da conversa ("CHAT")
+- `languageCode` — idioma detectado ("pt-BR")
 - `turnCount` — número de turnos da conversa
 - `durationNanos` — duração total em nanossegundos
 - `silencePercentage` — percentual de silêncio
@@ -141,7 +150,7 @@ A tabela `conversations_enriched` foi criada a partir da tabela bruta exportada 
 Todas as queries foram executadas sobre a tabela:
 
 ```sql
-quick-cache-484111-j4.ccai_poc.conversations_enriched
+ccai_poc.conversations_enriched
 ```
 
 ### 1. Produtividade por agente
@@ -274,7 +283,7 @@ A partir das queries executadas, obtivemos os seguintes resultados:
 
 ## Dashboard (Looker Studio)
 
-> 📌 **Espaço reservado para o print do dashboard**  
-> _(Substitua a linha abaixo pela imagem exportada do Looker Studio)_
+**Link para os dashs com as perguntas devidamente respondidas**  
 
-![Dashboard Looker Studio](./looker-dashboard.png)
+- https://lookerstudio.google.com/reporting/957cf4bb-7bab-452d-a207-4afef9c25df8
+
