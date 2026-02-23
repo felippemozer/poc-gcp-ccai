@@ -37,9 +37,12 @@ flowchart TD
         P1[Python Script<br/>Geração de Dados Sintéticos] --> P2[Cloud Storage<br/>GCS Bucket]
         P2 --> P3[CCAI Insights<br/>Import API]
         P3 --> P4[CCAI Insights<br/>Análise NLP]
-        P4 --> P5[BigQuery<br/>conversations_enriched]
-        P5 --> P6[Looker Studio<br/>Dashboard]
+        P4 --> P5a[BigQuery<br/><b>conversations</b><br/>Tabela BRUTA do CCAI]
+        P5a --> P6[Python Script<br/>Enriquecimento]
+        P6 --> P5b[BigQuery<br/><b>conversations_enriched</b><br/>Tabela FINAL]
+        P5b --> P7[Looker Studio<br/>Dashboard]
     end
+
 ```
 
 A seguir a arquitetura simplificada que simula o cenário real em streaming e batch:
