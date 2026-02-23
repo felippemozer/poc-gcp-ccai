@@ -112,6 +112,7 @@ O CCAI gerou, para cada conversa, os seguintes campos nativos:
 - `issues`, `entities`, `sentences`, `words` — análise de NLP
 
 A tabela conversations é gerada juntando os dados sintéticos do python a campos gerados pelo CCAI.
+
 <br/>
 conversations:
 <p align="center"> <img src="docs/conversations.png" width="900"/> </p>
