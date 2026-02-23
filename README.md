@@ -111,6 +111,11 @@ O CCAI gerou, para cada conversa, os seguintes campos nativos:
 - `agentSentimentScore`, `clientSentimentScore` — sentimento de cada parte
 - `issues`, `entities`, `sentences`, `words` — análise de NLP
 
+A tabela conversations é gerada juntando os dados sintéticos do python a campos gerados pelo CCAI.
+conversations:
+<p align="center"> <img src="docs/conversations.png" width="900"/> </p>
+<br/>
+
 Como os dados sintéticos não traziam metadados de negócio, criamos uma camada de enriquecimento em Python para simular um cenário real.
 
 ---
@@ -146,6 +151,9 @@ A tabela `conversations_enriched` foi criada a partir da tabela bruta exportada 
 - **Sentimento simulado** (`sentiment`)
   - Float entre aproximadamente -0.3 e 0.9
 
+<p align="center"> <img src="docs/conversations_enriched.png" width="900"/> </p>
+<br/>
+
 ---
 
 ## Queries do BigQuery
@@ -169,6 +177,9 @@ ORDER BY total_atendimentos DESC
 ```
 
 **O que faz:** Agrupa as conversas por agente, conta os atendimentos de cada um e aplica `RANK()` para gerar o ranking do mais ao menos produtivo. Útil para identificar desequilíbrio de carga entre agentes.
+
+<p align="center"> <img src="docs/ranking_agentes.png" width="900"/> </p>
+<br/>
 
 ---
 
