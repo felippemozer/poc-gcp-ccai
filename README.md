@@ -34,7 +34,7 @@ O primeiro diagrama abaixo, mostra como foi construida a solução (POC):
 flowchart TD
 
     subgraph POC["🧪 POC — Dados Sintéticos"]
-        P1[Python Script<br/>Geração de Dados Sintéticos<b>conversations</b>] --> P2[Cloud Storage<br/>GCS Bucket]
+        P1[Python Script<br/>Geração de Dados Sintéticos] --> P2[Cloud Storage<br/>conversations]
         P2 --> P3[CCAI Insights<br/>conversations_enriched]
         P3 --> P4[BigQuery<br/>Consultas]
         P4 --> P5[Looker Studio<br/>Dashboard]
@@ -166,7 +166,7 @@ ORDER BY total_atendimentos DESC
 **O que faz:** Agrupa as conversas por agente, conta os atendimentos de cada um e aplica `RANK()` para gerar o ranking do mais ao menos produtivo. Útil para identificar desequilíbrio de carga entre agentes.
 
 <br/>
-Exemplo de consulta:
+Exemplo de consulta no BigQuery:
 <p align="center"> <img src="docs/ranking_agentes.png" width="900"/> </p>
 <br/>
 
