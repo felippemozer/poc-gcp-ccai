@@ -34,13 +34,10 @@ O primeiro diagrama abaixo, mostra como foi construida a solução (POC):
 flowchart TD
 
     subgraph POC["🧪 POC — Dados Sintéticos"]
-        P1[Python Script<br/>Geração de Dados Sintéticos] --> P2[Cloud Storage<br/>GCS Bucket]
-        P2 --> P3[CCAI Insights<br/>Import API]
-        P3 --> P4[CCAI Insights<br/>Análise NLP]
-        P4 --> P5a[BigQuery<br/><b>conversations</b><br/>Tabela BRUTA do CCAI]
-        P5a --> P6[Python Script<br/>Enriquecimento]
-        P6 --> P5b[BigQuery<br/><b>conversations_enriched</b><br/>Tabela FINAL]
-        P5b --> P7[Looker Studio<br/>Dashboard]
+        P1[Python Script<br/>Geração de Dados Sintéticos<b>conversations</b>] --> P2[Cloud Storage<br/>GCS Bucket]
+        P2 --> P3[CCAI Insights<br/>conversations_enriched]
+        P3 --> P4[BigQuery<br/>Consultas]
+        P4 --> P5[Looker Studio<br/>Dashboard]
     end
 
 ```
@@ -96,35 +93,9 @@ flowchart LR
 
 ---
 
-## O que chegou ao CCAI
+## Dados gerados em Python
 
-Nesta POC trabalhamos com **1.000 conversas sintéticas** em formato CHAT, enviadas ao CCAI para simular uma operação real de contact center. Cada conversa representa um atendimento entre um cliente e um agente.
-
-O CCAI gerou, para cada conversa, os seguintes campos nativos:
-
-- `conversationName` — ID único da conversa
-- `medium` — formato da conversa ("CHAT")
-- `languageCode` — idioma detectado ("pt-BR")
-- `turnCount` — número de turnos da conversa
-- `durationNanos` — duração total em nanossegundos
-- `silencePercentage` — percentual de silêncio
-- `agentSentimentScore`, `clientSentimentScore` — sentimento de cada parte
-- `issues`, `entities`, `sentences`, `words` — análise de NLP
-
-A tabela conversations é gerada juntando os dados sintéticos do python a campos gerados pelo CCAI.
-
-<br/>
-conversations:
-<p align="center"> <img src="docs/conversations.png" width="900"/> </p>
-<br/>
-
-Como os dados sintéticos não traziam metadados de negócio, criamos uma camada de enriquecimento em Python para simular um cenário real.
-
----
-
-## Enriquecimento dos dados em Python
-
-A tabela `conversations_enriched` foi criada a partir da tabela bruta exportada pelo CCAI, com os seguintes campos simulados:
+Nesta POC trabalhamos com **1.000 conversas sintéticas** em formato CHAT, criando a tabela `conversations`, alguns dos campos simulados foram:
 
 - **Agentes simulados** (`agentId`)
   - Valores: `AG001`, `AG002`, `AG003`, `AG004`, `AG005`
@@ -153,10 +124,22 @@ A tabela `conversations_enriched` foi criada a partir da tabela bruta exportada 
 - **Sentimento simulado** (`sentiment`)
   - Float entre aproximadamente -0.3 e 0.9
 
-<br/>
-conversations_enriched:
-<p align="center"> <img src="docs/conversations_enriched.png" width="900"/> </p>
-<br/>
+---
+
+## Papéis do CCAI
+
+A `conversations_enriched` foi criada a partir da tabela exportada pelo CCAI, para simular uma operação real de contact center. Cada conversa representa um atendimento entre um cliente e um agente.
+
+O CCAI gerou, para cada conversa, os seguintes campos nativos:
+
+- `conversationName` — ID único da conversa
+- `medium` — formato da conversa ("CHAT")
+- `languageCode` — idioma detectado ("pt-BR")
+- `turnCount` — número de turnos da conversa
+- `durationNanos` — duração total em nanossegundos
+- `silencePercentage` — percentual de silêncio
+- `agentSentimentScore`, `clientSentimentScore` — sentimento de cada parte
+- `issues`, `entities`, `sentences`, `words` — análise de NLP (processamento de linguagem natural)
 
 ---
 
