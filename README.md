@@ -33,8 +33,8 @@ O primeiro diagrama abaixo, mostra como foi construida a solução (POC):
 ```mermaid
 flowchart TD
 
-    subgraph POC["🧪 POC — Dados Sintéticos"]
-        P1[Python Script<br/>Geração de Dados Sintéticos] --> P2[Cloud Storage<br/>conversations]
+    subgraph POC["POC — Dados Sintéticos"]
+        P1[Python Script<br/>Geração de Dados] --> P2[Cloud Storage<br/>conversations]
         P2 --> P3[CCAI Insights<br/>conversations_enriched]
         P3 --> P4[BigQuery<br/>Consultas]
         P4 --> P5[Looker Studio<br/>Dashboard]
@@ -47,9 +47,9 @@ A seguir a arquitetura simplificada que simula o cenário real em streaming e ba
 ```mermaid
 flowchart LR
 
-    subgraph BATCH["🗂️ Produção — Batch Diário"]
+    subgraph BATCH["Produção — Batch Diário"]
         direction LR
-        B1[📞 Fim da<br/>Ligação] --> B2[Telephony / CCAI<br/>Conversation]
+        B1[Fim da<br/>Ligação] --> B2[Telephony / CCAI<br/>Conversation]
         B2 --> B3[Firestore<br/>Metadados da conversa<br/>agentId, status, fcr...]
         B3 --> B4[Cloud Storage<br/>Áudio / Transcript]
         B4 -->|Cloud Scheduler<br/>23h diário| B5[Cloud Run<br/>Job de Exportação]
@@ -59,9 +59,9 @@ flowchart LR
         B7 --> B8[Looker Studio<br/>Dashboard Manhã]
     end
 
-    subgraph STREAM["⚡ Produção — Streaming"]
+    subgraph STREAM["Produção — Streaming"]
         direction LR
-        S1[📞 Fim da<br/>Ligação] --> S2[Telephony / CCAI<br/>Conversation]
+        S1[Fim da<br/>Ligação] --> S2[Telephony / CCAI<br/>Conversation]
         S2 --> S3[Pub/Sub<br/>Tópico: conversa-encerrada]
         S2 --> S4[Firestore<br/>Metadados em tempo real]
         S3 --> S5[Cloud Run<br/>Processador]
