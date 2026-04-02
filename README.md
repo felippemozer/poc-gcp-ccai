@@ -286,7 +286,4 @@ A partir das queries executadas, obtivemos os seguintes resultados:
 
 ## Dashboard (Looker Studio)
 
-**Link para os dashs com as perguntas devidamente respondidas**  
-
-- https://lookerstudio.google.com/reporting/957cf4bb-7bab-452d-a207-4afef9c25df8
-
+[Dashboard PDF](docs/POC_GCP_CCAI.pdf)
